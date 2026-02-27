@@ -1,6 +1,6 @@
 # 🍎 MatNela — Matematika s Nelou / Math with Nela
 
-> CZ [Česky](#-česky) &nbsp;|&nbsp; EN [English](#-english)
+> CZ [Česky](#cz-česky) &nbsp;|&nbsp; EN [English](#en-english)
 
 ---
 
