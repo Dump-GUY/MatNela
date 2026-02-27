@@ -1,5 +1,8 @@
 # 🍎 MatNela — Matematika s Nelou / Math with Nela
 
+> [!TIP]
+> **App URL:** [https://dump-guy.github.io/MatNela/MatNela.html](https://dump-guy.github.io/MatNela/MatNela.html)
+
 > CZ [Česky](#cz-česky) &nbsp;|&nbsp; EN [English](#en-english)
 
 ---
