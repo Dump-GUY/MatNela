@@ -1,6 +1,6 @@
 # 🍎 MatNela — Matematika s Nelou / Math with Nela
 
-### 🔗 App URL
+## 🔗 App URL
 > [https://dump-guy.github.io/MatNela/MatNela.html](https://dump-guy.github.io/MatNela/MatNela.html)
 ---
 
