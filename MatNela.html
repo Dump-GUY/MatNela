@@ -9,7 +9,8 @@
 <meta name="apple-mobile-web-app-title" content="Matematika s Nelou">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" id="pwa-manifest">
-<title>Matematika s Nelou</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>">
+<title>MatNela</title>
 <style>
 :root {
   --bg:#080c18; --bg2:#0d1225; --bg3:#111830;
@@ -339,7 +340,8 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
 (function(){
   const sv=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23080c18'/><path d='M256 150C140 150 96 260 160 360 210 440 302 440 352 360 416 260 372 150 256 150' fill='%23ef4444'/><path d='M256 150Q262 90 310 68' stroke='%2365a30d' stroke-width='24' fill='none' stroke-linecap='round'/><ellipse cx='210' cy='230' rx='28' ry='44' fill='rgba(255,255,255,0.2)' transform='rotate(-20 210 230)'/></svg>`;
   const iu=`data:image/svg+xml,${sv}`;
-  const m={name:"Matematika s Nelou",short_name:"MatNela",start_url:"./MatNela.html",display:"standalone",orientation:"portrait-primary",background_color:"#080c18",theme_color:"#080c18",icons:[{src:iu,sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"},{src:iu,sizes:"192x192",type:"image/svg+xml",purpose:"any"}]};
+const im=URL.createObjectURL(new Blob([`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='#080c18'/><text y='78' x='50' font-size='60' text-anchor='middle'>🍎</text></svg>`],{type:'image/svg+xml'}));
+  const m={name:"Matematika s Nelou",short_name:"MatNela",start_url:"./MatNela.html",display:"standalone",orientation:"portrait-primary",background_color:"#080c18",theme_color:"#080c18",icons:[{src:iu,sizes:"512x512",type:"image/svg+xml",purpose:"any"},{src:im,sizes:"512x512",type:"image/svg+xml",purpose:"maskable"}]};
   document.getElementById('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
 })();
 if('serviceWorker' in navigator){
@@ -418,7 +420,7 @@ function setLang(l,save=true){
   curLang=l;if(save)localStorage.setItem('mn-lang',l);
   document.documentElement.lang=l;
   const t=LANG[l];
-  document.title=l==='cs'?'Matematika s Nelou':'Math with Nela';
+  document.title='MatNela';
   // menu
   document.getElementById('menu-title').childNodes[0].textContent=t.appTitle;
   document.getElementById('menu-title-sub').textContent=t.appSub;
