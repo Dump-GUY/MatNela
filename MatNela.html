@@ -594,27 +594,66 @@ function playWrong(){
 /* ═══════════════════════════════════
    GAME
 ═══════════════════════════════════ */
-let G={ops:[],sc:0,cnt:0,hist:[],cur:null,ans:'',used:new Set()};
+let G={ops:[],sc:0,cnt:0,hist:[],cur:null,ans:'',used:new Set(),recentAns:[]};
 const rnd=(lo,hi)=>{if(lo>hi)[lo,hi]=[hi,lo];return Math.floor(Math.random()*(hi-lo+1))+lo;};
+
+// Weighted random: middle of range is preferred over extremes (especially 1)
+const rndW=(lo,hi)=>{
+  if(lo>=hi)return lo;
+  const pool=[];
+  for(let n=lo;n<=hi;n++){
+    pool.push(n);
+    if(n>lo&&n<hi)pool.push(n); // mid-range appears twice → less bias toward 1 or max
+  }
+  return pool[Math.floor(Math.random()*pool.length)];
+};
+
 function gen(ops){
   let p=null,t=0;
-  while(!p&&t<120){
+  while(!p&&t<150){
     const op=ops[Math.floor(Math.random()*ops.length)];const s=S[op];let n1,n2,res;
     try{
-      if(op==='+'){n1=rnd(1,s.op1);const m=Math.min(s.op2,s.res-n1);if(m<1){t++;continue;}n2=rnd(1,m);res=n1+n2;}
-      else if(op==='-'){n1=rnd(2,s.op1);const mn=Math.max(1,n1-s.res),mx=Math.min(s.op2,n1-1);if(mx<mn){t++;continue;}n2=rnd(mn,mx);res=n1-n2;}
-      else if(op==='·'){n1=rnd(1,s.op1);const m=Math.min(s.op2,Math.floor(s.res/n1));if(m<1){t++;continue;}n2=rnd(1,m);res=n1*n2;}
-      else{const md=Math.min(s.op2,s.op1);if(md<1){t++;continue;}n2=rnd(1,md);const mq=Math.min(s.res,Math.floor(s.op1/n2));if(mq<1){t++;continue;}res=rnd(1,mq);n1=n2*res;}
-      const r=Math.random();const tp=r<0.4?'result':r<0.7?'missing_second':'missing_first';
+      if(op==='+'){
+        n1=rndW(1,s.op1);
+        const maxN2=Math.min(s.op2,s.res-n1);
+        if(maxN2<1){t++;continue;}
+        n2=rndW(1,maxN2);res=n1+n2;
+      }
+      else if(op==='-'){
+        n1=rndW(2,s.op1);
+        const mn=Math.max(1,n1-s.res),mx=Math.min(s.op2,n1-1);
+        if(mx<mn){t++;continue;}
+        n2=rndW(mn,mx);res=n1-n2;
+      }
+      else if(op==='·'){
+        // Fix: generate n2 first (constrained range), then n1 freely — prevents n2=1 bias
+        n2=rndW(1,s.op2);
+        const maxN1=Math.min(s.op1,Math.floor(s.res/n2));
+        if(maxN1<1){t++;continue;}
+        n1=rndW(1,maxN1);res=n1*n2;
+      }
+      else{
+        n2=rndW(1,Math.min(s.op2,s.op1));
+        const maxQ=Math.min(s.res,Math.floor(s.op1/n2));
+        if(maxQ<1){t++;continue;}
+        res=rndW(1,maxQ);n1=n2*res;
+      }
+      const r=Math.random();
+      const tp=r<0.4?'result':r<0.7?'missing_second':'missing_first';
+      const a=tp==='result'?res:tp==='missing_first'?n1:n2;
       const k=`${op}:${n1}:${n2}:${tp}`;
-      if(!G.used.has(k)||t>80){G.used.add(k);const a=tp==='result'?res:tp==='missing_first'?n1:n2;p={n1,n2,op,tp,ans:a};}
+      // Anti-repeat: avoid same answer 2x in a row (unless stuck after many tries)
+      const rpt=G.recentAns.length>=2&&G.recentAns.slice(-2).every(x=>x===a);
+      if((!G.used.has(k)||t>80)&&(!rpt||t>110)){
+        G.used.add(k);p={n1,n2,op,tp,ans:a};
+      }
     }catch(e){}t++;
   }
-  return p||{n1:1,n2:1,op:'+',tp:'result',ans:2};
+  return p||{n1:2,n2:3,op:'+',tp:'result',ans:5};
 }
 const EL={dots:document.getElementById('dots'),sc:document.getElementById('score'),oplbl:document.getElementById('oplbl'),eq:document.getElementById('eq'),im:document.getElementById('imode'),fm:document.getElementById('fmode'),ua:document.getElementById('uans'),fc:document.getElementById('fcard'),ft:document.getElementById('ftit'),fx:document.getElementById('ftxt'),vis:document.getElementById('vis'),fsc:document.getElementById('fscore'),fst:document.getElementById('fstars')};
 const SYM={'+':'+','-':'−','·':'×',':':'÷'};
-function startGame(ops){G={ops,sc:0,cnt:0,hist:[],cur:null,ans:'',used:new Set()};showScreen('playing-screen');nxt();}
+function startGame(ops){G={ops,sc:0,cnt:0,hist:[],cur:null,ans:'',used:new Set(),recentAns:[]};showScreen('playing-screen');nxt();}
 function nxt(){
   if(G.cnt>=10){smry();return;}
   G.cur=gen(G.ops);G.ans='';
@@ -637,6 +676,7 @@ function hs(){
   if(!G.ans)return;
   const ok=parseInt(G.ans,10)===G.cur.ans;G.hist.push(ok);
   if(ok){G.sc++;cft();playCorrect();}else{playWrong();}G.cnt++;
+  G.recentAns.push(G.cur.ans);if(G.recentAns.length>3)G.recentAns.shift();
   EL.im.classList.add('hidden');EL.fm.classList.remove('hidden');
   EL.fc.className=`fcard ${ok?'correct':'wrong'}`;
   EL.ft.className=`ftit ${ok?'tc':'tw'}`;
