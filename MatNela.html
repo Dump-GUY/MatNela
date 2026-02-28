@@ -338,10 +338,23 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
    PWA + SERVICE WORKER
 ═══════════════════════════════════ */
 (function(){
-  const sv=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23080c18'/><path d='M256 150C140 150 96 260 160 360 210 440 302 440 352 360 416 260 372 150 256 150' fill='%23ef4444'/><path d='M256 150Q262 90 310 68' stroke='%2365a30d' stroke-width='24' fill='none' stroke-linecap='round'/><ellipse cx='210' cy='230' rx='28' ry='44' fill='rgba(255,255,255,0.2)' transform='rotate(-20 210 230)'/></svg>`;
-  const iu=`data:image/svg+xml,${sv}`;
-const im=URL.createObjectURL(new Blob([`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='#080c18'/><text y='78' x='50' font-size='60' text-anchor='middle'>🍎</text></svg>`],{type:'image/svg+xml'}));
-  const m={name:"Matematika s Nelou",short_name:"MatNela",start_url:"./MatNela.html",display:"standalone",orientation:"portrait-primary",background_color:"#080c18",theme_color:"#080c18",icons:[{src:iu,sizes:"512x512",type:"image/svg+xml",purpose:"any"},{src:im,sizes:"512x512",type:"image/svg+xml",purpose:"maskable"}]};
+  // Normal icon: apple on dark bg, full size
+  const iu="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%23080c18'/%3E%3Cpath d='M256 150C140 150 96 260 160 360 210 440 302 440 352 360 416 260 372 150 256 150' fill='%23ef4444'/%3E%3Cpath d='M256 150Q262 90 310 68' stroke='%2365a30d' stroke-width='24' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='210' cy='230' rx='28' ry='44' fill='rgba(255,255,255,0.2)' transform='rotate(-20 210 230)'/%3E%3C/svg%3E";
+  // Maskable icon: apple centered in safe zone (60% of area), solid bg all around
+  const im="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23080c18'/%3E%3Cpath d='M256 195C188 195 163 268 204 330 232 372 280 372 308 330 349 268 324 195 256 195' fill='%23ef4444'/%3E%3Cpath d='M256 195Q260 155 292 140' stroke='%2365a30d' stroke-width='18' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='236' cy='263' rx='18' ry='30' fill='rgba(255,255,255,0.2)' transform='rotate(-20 236 263)'/%3E%3C/svg%3E";
+  const m={
+    name:"Matematika s Nelou",
+    short_name:"MatNela",
+    start_url:window.location.href,
+    display:"standalone",
+    orientation:"portrait-primary",
+    background_color:"#080c18",
+    theme_color:"#080c18",
+    icons:[
+      {src:iu,sizes:"512x512",type:"image/svg+xml",purpose:"any"},
+      {src:im,sizes:"512x512",type:"image/svg+xml",purpose:"maskable"}
+    ]
+  };
   document.getElementById('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
 })();
 if('serviceWorker' in navigator){
