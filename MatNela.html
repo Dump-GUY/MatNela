@@ -6,7 +6,7 @@
 <meta name="theme-color" id="tc" content="#080c18">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Matematika s Nelou">
+<meta name="apple-mobile-web-app-title" content="MatNela">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" id="pwa-manifest">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍎</text></svg>">
@@ -338,24 +338,94 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
    PWA + SERVICE WORKER
 ═══════════════════════════════════ */
 (function(){
-  // Normal icon: apple on dark bg, full size
-  const iu="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%23080c18'/%3E%3Cpath d='M256 150C140 150 96 260 160 360 210 440 302 440 352 360 416 260 372 150 256 150' fill='%23ef4444'/%3E%3Cpath d='M256 150Q262 90 310 68' stroke='%2365a30d' stroke-width='24' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='210' cy='230' rx='28' ry='44' fill='rgba(255,255,255,0.2)' transform='rotate(-20 210 230)'/%3E%3C/svg%3E";
-  // Maskable icon: apple centered in safe zone (60% of area), solid bg all around
-  const im="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%23080c18'/%3E%3Cpath d='M256 195C188 195 163 268 204 330 232 372 280 372 308 330 349 268 324 195 256 195' fill='%23ef4444'/%3E%3Cpath d='M256 195Q260 155 292 140' stroke='%2365a30d' stroke-width='18' fill='none' stroke-linecap='round'/%3E%3Cellipse cx='236' cy='263' rx='18' ry='30' fill='rgba(255,255,255,0.2)' transform='rotate(-20 236 263)'/%3E%3C/svg%3E";
+  // Draw apple icon to canvas and export as PNG — proper maskable PNG like major PWAs
+  function makeIcon(size, maskable) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    const s = size;
+    const cx = s / 2, cy = s / 2;
+    const r = s * 0.42; // apple radius
+
+    // Background
+    ctx.fillStyle = '#080c18';
+    if (!maskable) {
+      // Rounded corners for "any" icon
+      const rad = s * 0.16;
+      ctx.beginPath();
+      ctx.moveTo(rad, 0);
+      ctx.lineTo(s - rad, 0);
+      ctx.quadraticCurveTo(s, 0, s, rad);
+      ctx.lineTo(s, s - rad);
+      ctx.quadraticCurveTo(s, s, s - rad, s);
+      ctx.lineTo(rad, s);
+      ctx.quadraticCurveTo(0, s, 0, s - rad);
+      ctx.lineTo(0, rad);
+      ctx.quadraticCurveTo(0, 0, rad, 0);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      ctx.fillRect(0, 0, s, s);
+    }
+
+    // Scale factor — maskable: apple fits in safe zone (60%), any: larger
+    const sc = maskable ? 0.52 : 0.72;
+    const aR = r * sc / 0.42; // adjusted radius
+    const aCy = cy + s * 0.05; // slightly below center
+
+    // Apple body
+    ctx.fillStyle = '#ef4444';
+    ctx.beginPath();
+    // Simple apple shape using bezier curves
+    ctx.moveTo(cx, aCy - aR * 0.85);
+    ctx.bezierCurveTo(cx + aR * 0.15, aCy - aR * 1.1,  cx + aR * 1.1, aCy - aR * 0.5, cx + aR * 0.9, aCy + aR * 0.3);
+    ctx.bezierCurveTo(cx + aR * 0.7, aCy + aR * 1.0,   cx + aR * 0.2, aCy + aR * 1.1, cx, aCy + aR * 1.0);
+    ctx.bezierCurveTo(cx - aR * 0.2, aCy + aR * 1.1,   cx - aR * 0.7, aCy + aR * 1.0, cx - aR * 0.9, aCy + aR * 0.3);
+    ctx.bezierCurveTo(cx - aR * 1.1, aCy - aR * 0.5,   cx - aR * 0.15, aCy - aR * 1.1, cx, aCy - aR * 0.85);
+    ctx.closePath();
+    ctx.fill();
+
+    // Stem
+    ctx.strokeStyle = '#65a30d';
+    ctx.lineWidth = aR * 0.18;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(cx, aCy - aR * 0.85);
+    ctx.quadraticCurveTo(cx + aR * 0.25, aCy - aR * 1.45, cx + aR * 0.55, aCy - aR * 1.55);
+    ctx.stroke();
+
+    // Shine
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.beginPath();
+    ctx.ellipse(cx - aR * 0.3, aCy - aR * 0.2, aR * 0.18, aR * 0.32, -0.35, 0, Math.PI * 2);
+    ctx.fill();
+
+    return c.toDataURL('image/png');
+  }
+
+  // Generate icons at multiple sizes
+  const sizes = [192, 256, 512];
+  const anyIcons   = sizes.map(sz => ({src: makeIcon(sz, false), sizes: sz+'x'+sz, type:'image/png', purpose:'any'}));
+  const maskIcons  = sizes.map(sz => ({src: makeIcon(sz, true),  sizes: sz+'x'+sz, type:'image/png', purpose:'maskable'}));
+
   const m={
-    name:"Matematika s Nelou",
+    name:"MatNela",
     short_name:"MatNela",
+    description:"Matematika s Nelou / Math with Nela",
     start_url:window.location.href,
     display:"standalone",
     orientation:"portrait-primary",
     background_color:"#080c18",
     theme_color:"#080c18",
-    icons:[
-      {src:iu,sizes:"512x512",type:"image/svg+xml",purpose:"any"},
-      {src:im,sizes:"512x512",type:"image/svg+xml",purpose:"maskable"}
-    ]
+    icons: [...anyIcons, ...maskIcons]
   };
   document.getElementById('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
+
+  // Also update apple-touch-icon dynamically for iOS
+  const appleIcon = makeIcon(180, false);
+  let appleLink = document.querySelector('link[rel="apple-touch-icon"]');
+  if (!appleLink) { appleLink = document.createElement('link'); appleLink.rel = 'apple-touch-icon'; document.head.appendChild(appleLink); }
+  appleLink.href = appleIcon;
 })();
 if('serviceWorker' in navigator){
   const sw=`const C='mn-v4';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./']).catch(()=>{})).then(()=>self.skipWaiting()));});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>{if(r)return r;return fetch(e.request).then(res=>{if(res&&res.status===200){const cl=res.clone();caches.open(C).then(c=>c.put(e.request,cl));}return res;}).catch(()=>new Response('Offline',{status:503}));}));});`;
