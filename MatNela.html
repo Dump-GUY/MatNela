@@ -334,80 +334,17 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
 </div>
 
 <script>
-/* ═══════════════════════════════════
-   PWA + SERVICE WORKER
-═══════════════════════════════════ */
 (function(){
-  // Draw apple icon to canvas and export as PNG — proper maskable PNG like major PWAs
-  function makeIcon(size, maskable) {
-    const c = document.createElement('canvas');
-    c.width = c.height = size;
-    const ctx = c.getContext('2d');
-    const s = size;
-    const cx = s / 2, cy = s / 2;
-    const r = s * 0.42; // apple radius
-
-    // Background
-    ctx.fillStyle = '#080c18';
-    if (!maskable) {
-      // Rounded corners for "any" icon
-      const rad = s * 0.16;
-      ctx.beginPath();
-      ctx.moveTo(rad, 0);
-      ctx.lineTo(s - rad, 0);
-      ctx.quadraticCurveTo(s, 0, s, rad);
-      ctx.lineTo(s, s - rad);
-      ctx.quadraticCurveTo(s, s, s - rad, s);
-      ctx.lineTo(rad, s);
-      ctx.quadraticCurveTo(0, s, 0, s - rad);
-      ctx.lineTo(0, rad);
-      ctx.quadraticCurveTo(0, 0, rad, 0);
-      ctx.closePath();
-      ctx.fill();
-    } else {
-      ctx.fillRect(0, 0, s, s);
-    }
-
-    // Scale factor — maskable: apple fits in safe zone (60%), any: larger
-    const sc = maskable ? 0.52 : 0.72;
-    const aR = r * sc / 0.42; // adjusted radius
-    const aCy = cy + s * 0.05; // slightly below center
-
-    // Apple body
-    ctx.fillStyle = '#ef4444';
-    ctx.beginPath();
-    // Simple apple shape using bezier curves
-    ctx.moveTo(cx, aCy - aR * 0.85);
-    ctx.bezierCurveTo(cx + aR * 0.15, aCy - aR * 1.1,  cx + aR * 1.1, aCy - aR * 0.5, cx + aR * 0.9, aCy + aR * 0.3);
-    ctx.bezierCurveTo(cx + aR * 0.7, aCy + aR * 1.0,   cx + aR * 0.2, aCy + aR * 1.1, cx, aCy + aR * 1.0);
-    ctx.bezierCurveTo(cx - aR * 0.2, aCy + aR * 1.1,   cx - aR * 0.7, aCy + aR * 1.0, cx - aR * 0.9, aCy + aR * 0.3);
-    ctx.bezierCurveTo(cx - aR * 1.1, aCy - aR * 0.5,   cx - aR * 0.15, aCy - aR * 1.1, cx, aCy - aR * 0.85);
-    ctx.closePath();
-    ctx.fill();
-
-    // Stem
-    ctx.strokeStyle = '#65a30d';
-    ctx.lineWidth = aR * 0.18;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(cx, aCy - aR * 0.85);
-    ctx.quadraticCurveTo(cx + aR * 0.25, aCy - aR * 1.45, cx + aR * 0.55, aCy - aR * 1.55);
-    ctx.stroke();
-
-    // Shine
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.beginPath();
-    ctx.ellipse(cx - aR * 0.3, aCy - aR * 0.2, aR * 0.18, aR * 0.32, -0.35, 0, Math.PI * 2);
-    ctx.fill();
-
-    return c.toDataURL('image/png');
-  }
-
-  // Generate icons at multiple sizes
-  const sizes = [192, 256, 512];
-  const anyIcons   = sizes.map(sz => ({src: makeIcon(sz, false), sizes: sz+'x'+sz, type:'image/png', purpose:'any'}));
-  const maskIcons  = sizes.map(sz => ({src: makeIcon(sz, true),  sizes: sz+'x'+sz, type:'image/png', purpose:'maskable'}));
-
+  const svgAny = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='28%25' y1='18%25' x2='75%25' y2='82%25'%3E%3Cstop offset='0%25' stop-color='%23ff5a5a'/%3E%3Cstop offset='100%25' stop-color='%23d63030'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M100 44 Q65 44 49 78 Q48 115 71 147 Q88 168 100 170 Q115 168 131 147 Q157 107 153 71 Q137 44 100 44Z' fill='url(%23g)' stroke='%23b71c1c' stroke-width='12'/%3E%3Cpath d='M100 44 Q108 23 131 19' fill='none' stroke='%234caf50' stroke-width='13.5' stroke-linecap='round'/%3E%3Cellipse cx='69' cy='76' rx='13.5' ry='20' fill='%23fff' opacity='0.55' transform='rotate(-32 69 76)'/%3E%3C/svg%3E`;
+  const svgMaskable = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='28%25' y1='18%25' x2='75%25' y2='82%25'%3E%3Cstop offset='0%25' stop-color='%23ff5a5a'/%3E%3Cstop offset='100%25' stop-color='%23d63030'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='100' cy='100' r='94' fill='%23080c18'/%3E%3Cpath d='M100 52 Q68 52 52 82 Q51 117 73 148 Q89 167 100 169 Q114 167 129 148 Q155 113 151 77 Q137 52 100 52Z' fill='url(%23g)' stroke='%23b71c1c' stroke-width='11'/%3E%3Cpath d='M100 52 Q107 33 129 30' fill='none' stroke='%234caf50' stroke-width='12.5' stroke-linecap='round'/%3E%3Cellipse cx='71' cy='81' rx='12.8' ry='19' fill='%23fff' opacity='0.52' transform='rotate(-33 71 81)'/%3E%3C/svg%3E`;
+  const icons = [
+    {src: svgAny, sizes:"192x192", type:"image/svg+xml", purpose:"any"},
+    {src: svgMaskable, sizes:"192x192", type:"image/svg+xml", purpose:"maskable"},
+    {src: svgAny, sizes:"256x256", type:"image/svg+xml", purpose:"any"},
+    {src: svgMaskable, sizes:"256x256", type:"image/svg+xml", purpose:"maskable"},
+    {src: svgAny, sizes:"512x512", type:"image/svg+xml", purpose:"any"},
+    {src: svgMaskable, sizes:"512x512", type:"image/svg+xml", purpose:"maskable"}
+  ];
   const m={
     name:"MatNela",
     short_name:"MatNela",
@@ -417,15 +354,13 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
     orientation:"portrait-primary",
     background_color:"#080c18",
     theme_color:"#080c18",
-    icons: [...anyIcons, ...maskIcons]
+    icons: icons
   };
   document.getElementById('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
-
-  // Also update apple-touch-icon dynamically for iOS
-  const appleIcon = makeIcon(180, false);
-  let appleLink = document.querySelector('link[rel="apple-touch-icon"]');
-  if (!appleLink) { appleLink = document.createElement('link'); appleLink.rel = 'apple-touch-icon'; document.head.appendChild(appleLink); }
-  appleLink.href = appleIcon;
+  const appleLink = document.querySelector('link[rel="apple-touch-icon"]') || document.createElement('link');
+  appleLink.rel = 'apple-touch-icon';
+  appleLink.href = svgAny;
+  if (!appleLink.parentNode) document.head.appendChild(appleLink);
 })();
 if('serviceWorker' in navigator){
   const sw=`const C='mn-v4';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./']).catch(()=>{})).then(()=>self.skipWaiting()));});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>{if(r)return r;return fetch(e.request).then(res=>{if(res&&res.status===200){const cl=res.clone();caches.open(C).then(c=>c.put(e.request,cl));}return res;}).catch(()=>new Response('Offline',{status:503}));}));});`;
@@ -504,7 +439,6 @@ function setLang(l,save=true){
   document.documentElement.lang=l;
   const t=LANG[l];
   document.title='MatNela';
-  // menu
   document.getElementById('menu-title').childNodes[0].textContent=t.appTitle;
   document.getElementById('menu-title-sub').textContent=t.appSub;
   document.getElementById('menu-sub').textContent=t.menuSub;
@@ -514,7 +448,6 @@ function setLang(l,save=true){
   document.getElementById('btn-div').textContent=t.btnDiv;
   document.getElementById('btn-mix').textContent=t.btnMix;
   document.getElementById('btn-set').textContent=t.btnSet;
-  // settings header
   document.getElementById('set-title').textContent=t.setTitle;
   document.getElementById('set-theme-label').textContent=t.setThemeLabel;
   document.getElementById('set-lang-label').textContent=t.setLangLabel;
@@ -524,18 +457,13 @@ function setLang(l,save=true){
   document.getElementById('set-apples-max').textContent=t.setApplesMax;
   document.getElementById('btn-save').textContent=t.btnSave;
   document.getElementById('btn-reset').textContent=t.btnReset;
-  // summary
   document.getElementById('sum-title').textContent=t.sumTitle;
   document.getElementById('btn-back').textContent=t.btnBack;
-  // playing
   const bn=document.getElementById('btn-next');if(bn)bn.textContent=t.btnNext;
-  // lang buttons
   document.getElementById('lang-cz').classList.toggle('active',l==='cs');
   document.getElementById('lang-en').classList.toggle('active',l==='en');
-  // rebuild OPC with correct language
   const ops=['+','-','·',':'];
   ops.forEach((op,i)=>{OPC[op]={name:t.opNames[i],ic:OPC[op]?OPC[op].ic:['igr','img','icy','ipu'][i],icon:OPC[op]?OPC[op].icon:['+','−','×','÷'][i],min:1,max:1000,lbl:t.opLbl[i]};});
-  // re-render settings if visible
   if(SCR&&SCR['settings-screen']&&SCR['settings-screen'].classList.contains('active'))renderSettings();
 }
 
@@ -681,14 +609,12 @@ function playWrong(){
 ═══════════════════════════════════ */
 let G={ops:[],sc:0,cnt:0,hist:[],cur:null,ans:'',used:new Set(),recentAns:[]};
 const rnd=(lo,hi)=>{if(lo>hi)[lo,hi]=[hi,lo];return Math.floor(Math.random()*(hi-lo+1))+lo;};
-
-// Weighted random: middle of range is preferred over extremes (especially 1)
 const rndW=(lo,hi)=>{
   if(lo>=hi)return lo;
   const pool=[];
   for(let n=lo;n<=hi;n++){
     pool.push(n);
-    if(n>lo&&n<hi)pool.push(n); // mid-range appears twice → less bias toward 1 or max
+    if(n>lo&&n<hi)pool.push(n);
   }
   return pool[Math.floor(Math.random()*pool.length)];
 };
@@ -711,7 +637,6 @@ function gen(ops){
         n2=rndW(mn,mx);res=n1-n2;
       }
       else if(op==='·'){
-        // Fix: generate n2 first (constrained range), then n1 freely — prevents n2=1 bias
         n2=rndW(1,s.op2);
         const maxN1=Math.min(s.op1,Math.floor(s.res/n2));
         if(maxN1<1){t++;continue;}
@@ -727,7 +652,6 @@ function gen(ops){
       const tp=r<0.4?'result':r<0.7?'missing_second':'missing_first';
       const a=tp==='result'?res:tp==='missing_first'?n1:n2;
       const k=`${op}:${n1}:${n2}:${tp}`;
-      // Anti-repeat: avoid same answer 2x in a row (unless stuck after many tries)
       const rpt=G.recentAns.length>=2&&G.recentAns.slice(-2).every(x=>x===a);
       if((!G.used.has(k)||t>80)&&(!rpt||t>110)){
         G.used.add(k);p={n1,n2,op,tp,ans:a};
@@ -785,7 +709,6 @@ const ASVG_DIM=`<svg viewBox="0 0 100 100" class="apl apl-dim"><path d="M50 28C2
 function aEl(d){return`<div style="animation-delay:${d}s">${ASVG}</div>`;}
 function aElDim(d){return`<div style="position:relative;animation-delay:${d}s">${ASVG_DIM}<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(14px,4vw,20px);font-weight:900;color:rgba(255,60,90,.9);text-shadow:0 0 4px rgba(255,60,90,.5)">✕</div></div>`;}
 function bsk(n,lbl='',isHi=false){return`<div class="bwrp"><div class="bsk${isHi?' hi':''}">${Array.from({length:n},(_,i)=>aEl(i*.04)).join('')}</div>${lbl?`<span class="blbl">${lbl}</span>`:''}</div>`;}
-// basket showing n1 total apples where last n2 are being removed
 function bskSub(n1,n2,lbl=''){
   const kept=n1-n2;
   let inner=Array.from({length:n1},(_,i)=>i<kept?aEl(i*.03):aElDim(i*.03)).join('');
@@ -801,7 +724,6 @@ function rVis(p){
   else if(op===':')h='<div class="brow">'+Array.from({length:n2},(_,i)=>bsk(n1/n2,`${t.basket} ${i+1}`)).join('')+'</div>';
   else if(op==='+')h=`<div class="brow">${bsk(n1,`${n1} ${t.apples}`)}<span class="vos">+</span>${bsk(n2,`${n2} ${t.apples}`)}<span class="vos">=</span>${bsk(n1+n2,`${n1+n2} ${t.total}`,true)}</div>`;
   else if(op==='-'){
-    // basket of n1 apples, minus basket of n2 (shown as removed), equals basket of result
     const res=n1-n2;
     h=`<div class="brow">${bskSub(n1,n2,`${n1} ${t.apples}`)}<span class="vos">−</span>${bsk(n2,`${n2} ${t.apples}`,'sub-remove')}<span class="vos">=</span>${bsk(res,`${res} ${t.total}`,true)}</div>`;
   }
