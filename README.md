@@ -1,7 +1,7 @@
 # 🍎 MatNela — Matematika s Nelou / Math with Nela
 
 ## 🔗 App URL
-> [https://dump-guy.github.io/MatNela/MatNela.html](https://dump-guy.github.io/MatNela/MatNela.html)
+> <a href="https://dump-guy.github.io/MatNela/MatNela.html" style="word-break:break-all;">https://dump-guy.github.io/MatNela/MatNela.html</a>
 ---
 
 > CZ [Česky](#cz-česky) &nbsp;|&nbsp; EN [English](#en-english)
@@ -27,7 +27,7 @@
 - ⚙️ Nastavení obtížnosti — rozsahy čísel pro každou operaci zvlášť
 - 🏆 Výsledky s hvězdičkami po každé sadě 10 příkladů
 - 📱 Funguje jako PWA — instalovatelná aplikace bez app storu
-- ✈️ **Plně funkční offline** po prvním načtení
+- ✈️ **Plně funkční offline** — i při prvním spuštění bez internetu
 
 ---
 
@@ -43,45 +43,60 @@ Aplikaci lze spustit **přímo z počítače nebo telefonu bez internetu a bez i
 
 ---
 
-### 📱 Instalace jako PWA — Android (Google Chrome)
+### 📱 Instalace jako PWA
 
 PWA (Progressive Web App) nainstaluje aplikaci na plochu jako normální app — bez app storu, bez poplatků.
 
 **Podmínka:** Aplikace musí být dostupná přes HTTPS adresu (ne lokální soubor).
 
-1. Otevři URL aplikace v **Google Chrome**
+**Po instalaci funguje plně offline** — aplikace se zakešuje při prvním načtení a dále nepotřebuje internet.
+
+Testováno a funkční na:
+
+| Platforma | Prohlížeč | Stav |
+|-----------|-----------|------|
+| Android | Google Chrome | ✅ Bez badge prohlížeče |
+| Android | Brave | ✅ Funkční (malý Brave badge) |
+| Android | Edge | ✅ Funkční (malý Edge badge) |
+| iOS / iPadOS | Safari | ✅ Bez badge |
+| iOS / iPadOS | Google Chrome | ✅ Bez badge |
+| Windows 10/11 | Google Chrome | ✅ S ikonou na ploše |
+| Windows 10/11 | Edge | ✅ S ikonou na ploše |
+| Linux Ubuntu | Google Chrome | ✅ S ikonou |
+| Linux Ubuntu | Firefox | ✅ Funkční |
+| macOS | — | ✅ Očekáváno funkční |
+
+> ℹ️ Badge (malá ikonka prohlížeče) u Brave a Edge na Androidu je standardní chování těchto prohlížečů a nelze ho ovlivnit. Google Chrome na Androidu badge nepřidává.
+
+---
+
+### 📱 Instalace jako PWA — Android
+
+1. Otevři URL aplikace v **Google Chrome** (nebo jiném prohlížeči)
 2. Chrome automaticky nabídne banner *„Přidat na plochu"* — klepni na něj
 3. Nebo klepni na **⋮** (tři tečky vpravo nahoře) → **Přidat na plochu** → **Přidat**
 4. Ikona 🍎 se objeví na ploše — aplikace se otevírá jako samostatná app bez lišty prohlížeče
 
-> ✅ Po instalaci funguje **plně offline**. Aplikace se zakešuje při prvním načtení.
-
 ---
 
-### 🍎 Instalace jako PWA — iPhone / iPad (Safari)
+### 🍎 Instalace jako PWA — iPhone / iPad (Safari nebo Chrome)
 
-**Podmínka:** Aplikace musí být dostupná přes HTTPS adresu (ne lokální soubor).
-
-1. Otevři URL aplikace v **Safari** *(Chrome na iOS PWA nepodporuje)*
+1. Otevři URL aplikace v **Safari nebo Google Chrome**
 2. Klepni na tlačítko **Sdílet** — ikona čtverce se šipkou nahoru ↑ (uprostřed dolní lišty)
 3. Přejdi dolů a vyber **Přidat na plochu**
 4. Uprav název (nebo ponech `MatNela`) → klepni **Přidat**
 5. Ikona 🍎 se objeví na ploše
 
-> ✅ Po instalaci funguje **plně offline**.
+> ℹ️ Chrome i Safari na iOS používají stejný způsob instalace PWA — postup je totožný.
 
 ---
 
-### 💻 Instalace jako PWA — Windows (Google Chrome)
+### 💻 Instalace jako PWA — Windows (Chrome nebo Edge)
 
-**Podmínka:** Aplikace musí být dostupná přes HTTPS adresu (ne lokální soubor).
-
-1. Otevři URL aplikace v **Google Chrome** na počítači
+1. Otevři URL aplikace v **Google Chrome nebo Edge** na počítači
 2. V adresním řádku vpravo se zobrazí ikona **⊕** (Instalovat aplikaci)
 3. Klikni na ni → **Instalovat**
-4. Aplikace se otevře ve vlastním okně bez prohlížeče a přidá se do nabídky Start / Launchpadu
-
-> ✅ Po instalaci funguje **plně offline**.
+4. Aplikace se otevře ve vlastním okně bez prohlížeče a přidá se do nabídky Start
 
 ---
 
@@ -137,7 +152,7 @@ Při jakémkoliv hostování nebo sdílení upravené verze je **povinné** uvé
 - ⚙️ Difficulty settings — number ranges for each operation individually
 - 🏆 Results with stars after every set of 10 problems
 - 📱 Works as a PWA — installable app without an app store
-- ✈️ **Fully offline capable** after first load
+- ✈️ **Fully offline capable** — even on the very first launch without internet
 
 ---
 
@@ -153,45 +168,60 @@ The app can be run **directly from your computer or phone without internet and w
 
 ---
 
-### 📱 PWA Installation — Android (Google Chrome)
+### 📱 PWA Installation
 
 A PWA (Progressive Web App) installs the app on your home screen like a regular app — no app store, no fees.
 
 **Requirement:** The app must be available via an HTTPS URL (not a local file).
 
-1. Open the app URL in **Google Chrome**
+**After installation the app works fully offline** — it is cached on first load and requires no internet connection afterwards.
+
+Tested and working on:
+
+| Platform | Browser | Status |
+|----------|---------|--------|
+| Android | Google Chrome | ✅ No browser badge |
+| Android | Brave | ✅ Works (small Brave badge) |
+| Android | Edge | ✅ Works (small Edge badge) |
+| iOS / iPadOS | Safari | ✅ No badge |
+| iOS / iPadOS | Google Chrome | ✅ No badge |
+| Windows 10/11 | Google Chrome | ✅ With icon on desktop |
+| Windows 10/11 | Edge | ✅ With icon on desktop |
+| Linux Ubuntu | Google Chrome | ✅ With icon |
+| Linux Ubuntu | Firefox | ✅ Works |
+| macOS | — | ✅ Expected to work |
+
+> ℹ️ The small browser badge shown by Brave and Edge on Android is standard behaviour of those browsers and cannot be removed. Google Chrome on Android does not add a badge.
+
+---
+
+### 📱 PWA Installation — Android
+
+1. Open the app URL in **Google Chrome** (or another browser)
 2. Chrome will automatically show a banner *"Add to Home Screen"* — tap it
 3. Or tap **⋮** (three dots top-right) → **Add to Home Screen** → **Add**
 4. The 🍎 icon appears on your home screen — the app opens standalone without the browser bar
 
-> ✅ After installation it works **fully offline**. The app is cached on first load.
-
 ---
 
-### 🍎 PWA Installation — iPhone / iPad (Safari)
+### 🍎 PWA Installation — iPhone / iPad (Safari or Chrome)
 
-**Requirement:** The app must be available via an HTTPS URL (not a local file).
-
-1. Open the app URL in **Safari** *(Chrome on iOS does not support PWA)*
+1. Open the app URL in **Safari or Google Chrome**
 2. Tap the **Share** button — the square with arrow icon ↑ (bottom center bar)
 3. Scroll down and select **Add to Home Screen**
 4. Edit the name (or keep `MatNela`) → tap **Add**
 5. The 🍎 icon appears on your home screen
 
-> ✅ After installation it works **fully offline**.
+> ℹ️ Both Chrome and Safari on iOS use the same PWA installation method — the steps are identical.
 
 ---
 
-### 💻 PWA Installation — Windows (Google Chrome)
+### 💻 PWA Installation — Windows (Chrome or Edge)
 
-**Requirement:** The app must be available via an HTTPS URL (not a local file).
-
-1. Open the app URL in **Google Chrome** on your computer
+1. Open the app URL in **Google Chrome or Edge** on your computer
 2. An install icon **⊕** appears on the right side of the address bar
 3. Click it → **Install**
-4. The app opens in its own window without the browser and is added to Start Menu / Launchpad
-
-> ✅ After installation it works **fully offline**.
+4. The app opens in its own window without the browser and is added to the Start Menu
 
 ---
 
