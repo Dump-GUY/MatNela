@@ -53,6 +53,7 @@
   --gpu:0 0 14px rgba(102,0,187,.5),0 0 30px rgba(102,0,187,.15),0 2px 8px rgba(0,0,0,.12);
   --cs:0 4px 24px rgba(0,40,180,.12),inset 0 1px 0 rgba(255,255,255,.9);
 }
+
 /* ── SCROLLBAR ── */
 :root {
   scrollbar-color: #3d5280 #0d1225;
@@ -112,6 +113,9 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
 .menu-hero-title{font-family:var(--fh);font-size:clamp(1.6rem,6.5vw,3.2rem);font-weight:700;letter-spacing:.06em;color:var(--cy);text-shadow:var(--gcy);white-space:nowrap}
 .menu-hero-title span{color:var(--text);text-shadow:none}
 .menu-sub{font-family:var(--fb);font-size:clamp(.82rem,3vw,1rem);color:var(--t2);text-align:center;margin-bottom:clamp(.8rem,3vh,1.6rem);font-weight:700}
+
+/* ── VERSION BADGE ── */
+.menu-ver{font-family:var(--fh);font-size:clamp(.7rem,2vw,.82rem);color:var(--cy);text-shadow:var(--gcy);text-align:center;letter-spacing:.06em;margin-top:.5rem}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(.65rem,2.5vw,1.1rem);width:100%;max-width:min(580px,94vw)}
 .mbtn{background:var(--card);border:1px solid var(--cb);border-radius:var(--r2);padding:clamp(1.15rem,4.5vw,1.9rem) clamp(.7rem,2.5vw,1.2rem);font-family:var(--fb);font-size:clamp(.95rem,3.5vw,1.15rem);font-weight:800;color:var(--text);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.35em;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);position:relative;overflow:hidden;transition:box-shadow .15s,border-color .15s,transform .1s;-webkit-appearance:none;appearance:none}
 .mbtn::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
@@ -201,6 +205,7 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
 .ftit{font-family:var(--fh);font-size:clamp(1.1rem,min(5vw,5vh),1.6rem);font-weight:700;letter-spacing:.08em;margin-bottom:.2rem}
 .ftit.tc{color:var(--gr);text-shadow:var(--ggr)}.ftit.tw{color:var(--re);text-shadow:var(--gre)}
 .ftxt{font-family:var(--fb);font-size:clamp(.78rem,2.5vw,.92rem);font-weight:700;color:var(--t2);margin-bottom:.3rem}
+
 /* vis: no fixed height cap - scrolls with the page, no inner scrollbar */
 .vis{background:rgba(0,0,0,.12);border-radius:var(--r2);padding:clamp(.5rem,2vw,.9rem) clamp(.4rem,1.5vw,.75rem);margin-top:.5rem;border:1px solid var(--cb);overflow:visible}
 [data-theme="light"] .vis{background:rgba(255,255,255,.45)}
@@ -252,6 +257,7 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
     <button class="mbtn cy" onclick="startGame(['+','-','·',':'])"><span class="mico"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="18,3 22.5,13.5 34,14.5 25.5,22.5 28,34 18,28 8,34 10.5,22.5 2,14.5 13.5,13.5" fill="var(--ye)" stroke="var(--ye)" stroke-width="1" stroke-linejoin="round"/></svg></span><span id="btn-mix">Vše dohromady</span></button>
     <button class="mbtn cgr" onclick="showScreen('settings-screen')"><span class="mico"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="18" cy="18" r="5" stroke="var(--t2)" stroke-width="2.5"/><path d="M18 3v4M18 29v4M3 18h4M29 18h4M7.05 7.05l2.83 2.83M26.12 26.12l2.83 2.83M26.12 9.88l-2.83 2.83M9.88 26.12l-2.83 2.83" stroke="var(--t2)" stroke-width="2.5" stroke-linecap="round"/></svg></span><span id="btn-set">Nastavení</span></button>
   </div>
+  <div class="menu-ver" id="menu-ver">MatNela (mn-v1.0)</div>
 </div>
 
 <div id="settings-screen" class="screen">
@@ -358,9 +364,18 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
 </div>
 
 <script>
+/* WARNING ⚠️
+   ╔════════════════════════════════════════════════════════╗
+   ║  APP_VERSION — INCREMENT ON EVERY NEW RELEASE!         ║
+   ║  Pattern: mn-v1.0 → mn-v1.1 → mn-v1.2 → mn-v2.0 etc.   ║
+   ║  This value is used as the Service Worker cache name.  ║
+   ║  Changing it forces cache refresh for all users.       ║
+   ╚════════════════════════════════════════════════════════╝ */
+const APP_VERSION='mn-v1.0';
+
 /* ═══════════════════════════════════
    PWA + SERVICE WORKER
-═══════════════════════════════════ */
+   ═══════════════════════════════════ */
 (function(){
   // Draw apple icon to canvas and export as PNG — proper maskable PNG like major PWAs
   function makeIcon(size, maskable) {
@@ -459,13 +474,16 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
   appleLink.href = appleIcon;
 })();
 if('serviceWorker' in navigator){
-  const sw=`const C='mn-v4';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['./']).catch(()=>{})).then(()=>self.skipWaiting()));});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>clients.claim()));});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>{if(r)return r;return fetch(e.request).then(res=>{if(res&&res.status===200){const cl=res.clone();caches.open(C).then(c=>c.put(e.request,cl));}return res;}).catch(()=>new Response('Offline',{status:503}));}));});`;
+  const sw=`const C='${APP_VERSION}';const APP='./MatNela.html';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(cache=>cache.match(APP).then(existing=>{if(existing)return;return fetch(APP).then(r=>{if(r.ok)cache.put(APP,r);}).catch(()=>{});})).then(()=>self.skipWaiting()));});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>clients.claim()));});self.addEventListener('fetch',e=>{if(e.request.mode==='navigate'){e.respondWith(caches.match(APP).then(r=>{if(r)return r;return fetch(e.request).then(res=>{if(res.ok)caches.open(C).then(c=>c.put(APP,res.clone()));return res;}).catch(()=>caches.match(APP));}));return;}e.respondWith(caches.match(e.request,{ignoreSearch:true}).then(r=>r||fetch(e.request).then(res=>{if(res&&res.ok)caches.open(C).then(c=>c.put(e.request,res.clone()));return res;}).catch(()=>new Response('',{status:404}))));});`;
   navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'})),{scope:'./'}).catch(()=>{});
+  // Update version badge in menu with current APP_VERSION
+  const vEl=document.getElementById('menu-ver');
+  if(vEl)vEl.textContent='MatNela ('+APP_VERSION+')';
 }
 
 /* ═══════════════════════════════════
    I18N
-═══════════════════════════════════ */
+   ═══════════════════════════════════ */
 const LANG={
   cs:{
     appTitle:'MATEMATIKA',appSub:' S NELOU',
@@ -576,7 +594,7 @@ function setLang(l,save=true){
 
 /* ═══════════════════════════════════
    THEME
-═══════════════════════════════════ */
+   ═══════════════════════════════════ */
 let isDark=true;
 function initTheme(){
   const s=localStorage.getItem('mn-theme');
@@ -597,7 +615,7 @@ function toggleTheme(d){applyTheme(d);}
 
 /* ═══════════════════════════════════
    CONFIG
-═══════════════════════════════════ */
+   ═══════════════════════════════════ */
 const OPC={
   '+':{name:'SČÍTÁNÍ',  ic:'igr',icon:'+',min:1,max:1000,lbl:['Max sčítanec','Max sčítanec','Max součet']},
   '-':{name:'ODČÍTÁNÍ', ic:'img',icon:'−',min:1,max:1000,lbl:['Max menšenec','Max menšitel','Max rozdíl']},
@@ -611,7 +629,7 @@ try{const sv=JSON.parse(localStorage.getItem('mn-s1')||'null');if(sv){for(const 
 
 /* ═══════════════════════════════════
    SCREENS
-═══════════════════════════════════ */
+   ═══════════════════════════════════ */
 const SCR={};['menu-screen','settings-screen','playing-screen','summary-screen'].forEach(id=>{SCR[id]=document.getElementById(id);});
 function showScreen(id){
   Object.values(SCR).forEach(s=>s.classList.remove('active'));
@@ -621,7 +639,7 @@ function showScreen(id){
 
 /* ═══════════════════════════════════
    SETTINGS
-═══════════════════════════════════ */
+   ═══════════════════════════════════ */
 function renderSettings(){
   const c=document.getElementById('settings-container');c.innerHTML='';
   const ops=['+','-','·',':'];
@@ -698,7 +716,7 @@ function resetSettings(){S=JSON.parse(JSON.stringify(DEF));renderSettings();}
 
 /* ═══════════════════════════════════
    SOUNDS
-═══════════════════════════════════ */
+   ═══════════════════════════════════ */
 const AC=window.AudioContext||window.webkitAudioContext;let _ac=null;
 function getAC(){if(!_ac){try{_ac=new AC();}catch(e){}}return _ac;}
 function playCorrect(){
@@ -721,7 +739,7 @@ function playWrong(){
 
 /* ═══════════════════════════════════
    GAME
-═══════════════════════════════════ */
+   ═══════════════════════════════════ */
 let G={ops:[],sc:0,cnt:0,hist:[],cur:null,ans:'',used:new Set(),recentAns:[]};
 const rnd=(lo,hi)=>{if(lo>hi)[lo,hi]=[hi,lo];return Math.floor(Math.random()*(hi-lo+1))+lo;};
 
@@ -883,7 +901,7 @@ document.addEventListener('keydown',e=>{
 
 /* ═══════════════════════════════════
    INIT
-═══════════════════════════════════ */
+   ═══════════════════════════════════ */
 initTheme();
 curLang=detectLang();
 setLang(curLang,false);
