@@ -419,7 +419,14 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
     theme_color:"#080c18",
     icons: [...anyIcons, ...maskIcons]
   };
-  document.getElementById('pwa-manifest').href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(m));
+  // Android Chrome handles blob: URLs correctly and needs them for proper maskable icons (no badge)
+  // Windows Chrome needs data: URI because the OS installer process can't access blob: URLs
+  const isAndroid = /android/i.test(navigator.userAgent);
+  if (isAndroid) {
+    document.getElementById('pwa-manifest').href = URL.createObjectURL(new Blob([JSON.stringify(m)], {type:'application/json'}));
+  } else {
+    document.getElementById('pwa-manifest').href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(m));
+  }
 
   // Also update apple-touch-icon dynamically for iOS
   const appleIcon = makeIcon(180, false);
