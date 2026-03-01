@@ -356,7 +356,7 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
     theme_color:"#080c18",
     icons: icons
   };
-  document.getElementById('pwa-manifest').href=URL.createObjectURL(new Blob([JSON.stringify(m)],{type:'application/json'}));
+  document.getElementById('pwa-manifest').href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(m));
   const appleLink = document.querySelector('link[rel="apple-touch-icon"]') || document.createElement('link');
   appleLink.rel = 'apple-touch-icon';
   appleLink.href = svgAny;
