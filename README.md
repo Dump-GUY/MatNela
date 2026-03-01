@@ -25,7 +25,7 @@
 - 🌐 Čeština a angličtina (automatická detekce jazyka systému)
 - 🔊 Zvukové efekty pro správnou i špatnou odpověď
 - ⚙️ Nastavení obtížnosti — rozsahy čísel pro každou operaci zvlášť
-- 🏆 Výsledky s hvězdičkami po každé sadě 10 příkladů
+- 🏆 Výsledky s hvězdičkami — nastavitelný počet příkladů (5–30, výchozí 15)
 - 📱 Funguje jako PWA — instalovatelná aplikace bez app storu
 - ✈️ **Plně funkční offline** — i při prvním spuštění bez internetu
 
@@ -150,7 +150,7 @@ Při jakémkoliv hostování nebo sdílení upravené verze je **povinné** uvé
 - 🌐 Czech and English (auto-detects system language)
 - 🔊 Sound effects for correct and wrong answers
 - ⚙️ Difficulty settings — number ranges for each operation individually
-- 🏆 Results with stars after every set of 10 problems
+- 🏆 Results with stars — configurable number of problems (5–30, default 15)
 - 📱 Works as a PWA — installable app without an app store
 - ✈️ **Fully offline capable** — even on the very first launch without internet
 
