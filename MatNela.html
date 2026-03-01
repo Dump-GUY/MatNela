@@ -165,12 +165,12 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
 
 /* PLAYING */
 #playing-screen{justify-content:flex-start;gap:0;padding:max(env(safe-area-inset-top,0px),.75rem) 1rem max(env(safe-area-inset-bottom,0px),.75rem)}
-.ghdr{width:100%;max-width:720px;display:flex;justify-content:space-between;align-items:center;padding:.4rem .7rem;margin-bottom:.5rem;flex-shrink:0;border-radius:var(--r2)}
-.dots{display:flex;gap:4px;flex-wrap:nowrap}
-.dot{width:clamp(8px,2.2vw,11px);height:clamp(8px,2.2vw,11px);border-radius:2px;background:var(--bg3);border:1px solid var(--cb);transition:background .3s,box-shadow .3s;flex-shrink:0}
+.ghdr{width:100%;max-width:720px;display:grid;grid-template-columns:clamp(44px,12vw,56px) 1fr clamp(44px,12vw,56px);align-items:center;padding:.5rem .7rem;margin-bottom:.5rem;flex-shrink:0;border-radius:var(--r2);min-height:52px}
+.dots{display:flex;gap:3px;flex-wrap:nowrap;flex-direction:column;justify-content:center;align-items:center;padding:0 4px}
+.dotrow{display:flex;gap:4px;justify-content:center;}.dot{width:10px;height:10px;border-radius:2px;background:var(--bg3);border:1px solid var(--cb);transition:background .3s,box-shadow .3s;flex-shrink:0}
 .dot.correct{background:var(--gr);border-color:var(--gr);box-shadow:0 0 6px var(--grg)}
 .dot.wrong{background:var(--re);border-color:var(--re);box-shadow:0 0 6px var(--reg)}
-.scbg{font-family:var(--fh);font-size:clamp(.95rem,3vw,1.15rem);font-weight:700;letter-spacing:.1em;color:var(--cy);min-width:3.5ch;text-align:right}
+.scbg{font-family:var(--fh);font-size:clamp(.95rem,3vw,1.15rem);font-weight:700;letter-spacing:.1em;color:var(--cy);text-align:right;justify-self:end}
 .pcont{display:flex;flex-direction:column;align-items:center;width:100%;max-width:720px;gap:clamp(.7rem,3vh,1.5rem);padding-bottom:max(env(safe-area-inset-bottom,0px),.75rem)}
 .oplbl{font-family:var(--fh);font-size:clamp(.6rem,2vw,.75rem);letter-spacing:.18em;color:var(--t3);text-transform:uppercase;margin-bottom:.15rem;flex-shrink:0}
 .eq{font-family:var(--fh);font-weight:700;font-size:clamp(2rem,min(10vw,10vh),5.5rem);color:var(--text);display:flex;align-items:center;gap:.2em;margin:0;flex-wrap:wrap;justify-content:center;letter-spacing:.04em;flex-shrink:0}
@@ -229,11 +229,9 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
 .sumsub{font-family:var(--fb);font-size:clamp(.95rem,3vw,1.1rem);font-weight:800;color:var(--t2);margin:0 0 .25rem}
 .sumsc{color:var(--ye);text-shadow:var(--gye)}
 .stars{display:flex;justify-content:center;gap:.5rem;margin:1.1rem 0}
-.star{width:clamp(2.2rem,7vw,3rem);height:clamp(2.2rem,7vw,3rem);color:var(--t3);fill:none;transition:transform .3s,color .3s,filter .3s}
+.star{width:clamp(1.6rem,5.5vw,2.4rem);height:clamp(1.6rem,5.5vw,2.4rem);color:var(--t3);fill:none;transition:transform .3s,color .3s,filter .3s}
 .star.active{color:var(--ye);fill:currentColor;filter:drop-shadow(0 0 7px var(--yeg))}
-.star.active:nth-child(1){transform:scale(1.1) rotate(-8deg)}
-.star.active:nth-child(2){transform:scale(1.2) rotate(0)}
-.star.active:nth-child(3){transform:scale(1.1) rotate(8deg)}
+.star.active:nth-child(1){transform:scale(1.0) rotate(-12deg)}.star.active:nth-child(2){transform:scale(1.1) rotate(-5deg)}.star.active:nth-child(3){transform:scale(1.2) rotate(0)}.star.active:nth-child(4){transform:scale(1.1) rotate(5deg)}.star.active:nth-child(5){transform:scale(1.0) rotate(12deg)}
 .sumbk{background:rgba(0,255,255,.08);color:var(--cy);border:1px solid var(--cy);width:100%;padding:clamp(.7rem,2.5vw,.95rem);border-radius:var(--r2);font-family:var(--fh);font-size:clamp(.9rem,3vw,1rem);font-weight:700;letter-spacing:.1em;cursor:pointer;box-shadow:var(--gcy);transition:background .15s;-webkit-appearance:none;appearance:none}
 .sumbk:hover{background:rgba(0,255,255,.15)}
 </style>
@@ -299,6 +297,16 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
       </div>
       <div class="leg">
         <div class="li" style="color:var(--gr)"><div class="ld" style="background:var(--gr)"></div><span id="set-apples-max">Max počet</span>: <span id="val-apples">30</span></div>
+      </div>
+    </div>
+    <div class="sgrp" style="border-top:1px solid var(--cb);margin-top:1.1rem;padding-top:1.1rem;padding-bottom:0;margin-bottom:0;border-bottom:none;">
+      <div class="stit"><div class="sico icy">🔢</div><span id="set-count-label">Počet příkladů</span></div>
+      <div class="mslide" id="slider-count">
+        <div class="strk"></div>
+        <div class="sthm tre" id="thumb-count">15</div>
+      </div>
+      <div class="leg">
+        <div class="li" style="color:var(--gr)"><div class="ld" style="background:var(--gr)"></div><span id="set-count-val">Počet</span>: <span id="val-count">15</span></div>
       </div>
     </div>
     <button class="bsav" id="btn-save" onclick="saveSettings()">✓ ULOŽIT NASTAVENÍ</button>
@@ -468,6 +476,7 @@ const LANG={
     setLangLabel:'Jazyk / Language',setLangDesc:'Zvolte jazyk aplikace',
     themeDark:'Tmavý režim',themeLight:'Světlý režim',
     setApplesLabel:'Max jablek ve vizualizaci',setApplesMax:'Max počet',
+    setCountLabel:'Počet příkladů',setCountVal:'Počet',
     btnSave:'✓ ULOŽIT NASTAVENÍ',btnReset:'↺ OBNOVIT VÝCHOZÍ',
     saveErrMsg:'⚠ Oprav chybné hodnoty před uložením!',
     opNames:['SČÍTÁNÍ','ODČÍTÁNÍ','NÁSOBENÍ','DĚLENÍ'],
@@ -495,6 +504,7 @@ const LANG={
     setLangLabel:'Jazyk / Language',setLangDesc:'Choose app language',
     themeDark:'Dark mode',themeLight:'Light mode',
     setApplesLabel:'Max apples in visualization',setApplesMax:'Max count',
+    setCountLabel:'Number of problems',setCountVal:'Count',
     btnSave:'✓ SAVE SETTINGS',btnReset:'↺ RESTORE DEFAULTS',
     saveErrMsg:'⚠ Fix invalid values before saving!',
     opNames:['ADDITION','SUBTRACTION','MULTIPLICATION','DIVISION'],
@@ -545,6 +555,8 @@ function setLang(l,save=true){
   document.getElementById('theme-label').textContent=isDark?t.themeDark:t.themeLight;
   document.getElementById('set-apples-label').textContent=t.setApplesLabel;
   document.getElementById('set-apples-max').textContent=t.setApplesMax;
+  const scl=document.getElementById('set-count-label');if(scl)scl.textContent=t.setCountLabel;
+  const scv=document.getElementById('set-count-val');if(scv)scv.textContent=t.setCountVal;
   document.getElementById('btn-save').textContent=t.btnSave;
   document.getElementById('btn-reset').textContent=t.btnReset;
   // summary
@@ -592,9 +604,10 @@ const OPC={
   '·':{name:'NÁSOBENÍ', ic:'icy',icon:'×',min:1,max:1000,lbl:['Max činitel','Max činitel','Max součin']},
   ':':{name:'DĚLENÍ',   ic:'ipu',icon:'÷',min:1,max:1000,lbl:['Max dělenec','Max dělitel','Max podíl']}
 };
-const DEF={'+': {op1:100,op2:100,res:100},'-':{op1:100,op2:100,res:100},'·':{op1:10,op2:2,res:20},':':{op1:20,op2:2,res:10},maxApples:30};
+const DEF={'+': {op1:100,op2:100,res:100},'-':{op1:100,op2:100,res:100},'·':{op1:10,op2:2,res:20},':':{op1:20,op2:2,res:10},maxApples:30,maxCount:15};
 let S=JSON.parse(JSON.stringify(DEF));
-try{const sv=JSON.parse(localStorage.getItem('mn-s1')||'null');if(sv){for(const o of['+','-','·',':'])if(sv[o])S[o]={...DEF[o],...sv[o]};if(sv.maxApples!=null)S.maxApples=sv.maxApples;}}catch(e){}
+try{const sv=JSON.parse(localStorage.getItem('mn-s1')||'null');if(sv){for(const o of['+','-','·',':'])if(sv[o])S[o]={...DEF[o],...sv[o]};if(sv.maxApples!=null)S.maxApples=sv.maxApples;
+    if(sv.maxCount!=null)S.maxCount=sv.maxCount;}}catch(e){}
 
 /* ═══════════════════════════════════
    SCREENS
@@ -629,6 +642,7 @@ function renderSettings(){
     initSlider(op,cf.min,cf.max);
   });
   initASlider();
+  initCountSlider();
 }
 function dragThumb(thumb,cb){
   const start=(e)=>{
@@ -654,6 +668,12 @@ function initASlider(){
   if(!th)return;
   const u=()=>{const p=(S.maxApples-MI)/(MA-MI);th.style.left=`${p*100}%`;th.textContent=S.maxApples;if(ve)ve.textContent=S.maxApples;};
   dragThumb(th,p=>{S.maxApples=Math.round(MI+p*(MA-MI));u();});u();
+}
+function initCountSlider(){
+  const MI=5,MA=30,th=document.getElementById('thumb-count'),ve=document.getElementById('val-count');
+  if(!th)return;
+  const u=()=>{const p=(S.maxCount-MI)/(MA-MI);th.style.left=`${p*100}%`;th.textContent=S.maxCount;if(ve)ve.textContent=S.maxCount;};
+  dragThumb(th,p=>{S.maxCount=Math.round(MI+p*(MA-MI));u();});u();
 }
 function vld(op){
   const s=S[op];const m=document.getElementById(`vm-${op}`);if(!m)return;
@@ -763,10 +783,21 @@ const EL={dots:document.getElementById('dots'),sc:document.getElementById('score
 const SYM={'+':'+','-':'−','·':'×',':':'÷'};
 function startGame(ops){G={ops,sc:0,cnt:0,hist:[],cur:null,ans:'',used:new Set(),recentAns:[]};showScreen('playing-screen');nxt();}
 function nxt(){
-  if(G.cnt>=10){smry();return;}
+  if(G.cnt>=(S.maxCount||10)){smry();return;}
   G.cur=gen(G.ops);G.ans='';
-  EL.sc.textContent=`${G.sc}/${G.cnt}`;
-  EL.dots.innerHTML=Array.from({length:10},(_,i)=>`<div class="dot ${i<G.cnt?(G.hist[i]?'correct':'wrong'):''}"></div>`).join('');
+  const mc=S.maxCount||10;
+  EL.sc.textContent=`${G.sc}/${S.maxCount||10}`;
+  // Dot size scales with count — all fit in one or two rows
+  // ≤15: single row. >15: two rows of ceil(mc/2) and floor(mc/2), both centered
+  if(mc<=15){
+    EL.dots.innerHTML=Array.from({length:mc},(_,i)=>`<div class="dot ${i<G.cnt?(G.hist[i]?'correct':'wrong'):''}"></div>`).join('');
+    EL.dots.style.flexDirection='row';
+  } else {
+    const top=Math.ceil(mc/2),bot=mc-top;
+    const row=(from,len)=>Array.from({length:len},(_,i)=>`<div class="dot ${(from+i)<G.cnt?(G.hist[from+i]?'correct':'wrong'):''}"></div>`).join('');
+    EL.dots.innerHTML=`<div class="dotrow">${row(0,top)}</div><div class="dotrow">${row(top,bot)}</div>`;
+    EL.dots.style.flexDirection='column';
+  }
   const t=T();
   EL.oplbl.textContent=G.ops.length>1?`${t.opMixed} — ${OPC[G.cur.op].name}`:OPC[G.cur.op].name;
   document.getElementById('btn-next').textContent=t.btnNext;
@@ -785,6 +816,7 @@ function hs(){
   const ok=parseInt(G.ans,10)===G.cur.ans;G.hist.push(ok);
   if(ok){G.sc++;cft();playCorrect();}else{playWrong();}G.cnt++;
   G.recentAns.push(G.cur.ans);if(G.recentAns.length>3)G.recentAns.shift();
+  EL.sc.textContent=`${G.sc}/${S.maxCount||10}`;
   EL.im.classList.add('hidden');EL.fm.classList.remove('hidden');
   EL.fc.className=`fcard ${ok?'correct':'wrong'}`;
   EL.ft.className=`ftit ${ok?'tc':'tw'}`;
@@ -797,11 +829,13 @@ function hn(){nxt();}
 function smry(){
   showScreen('summary-screen');EL.fsc.textContent=G.sc;
   const t=T();
-  document.getElementById('sum-sub').innerHTML=`${t.sumSub} <span class="sumsc">${G.sc}</span> / 10`;
+  document.getElementById('sum-sub').innerHTML=`${t.sumSub} <span class="sumsc">${G.sc}</span> / ${S.maxCount||10}`;
   document.getElementById('sum-title').textContent=t.sumTitle;
   document.getElementById('btn-back').textContent=t.btnBack;
-  const st=G.sc>=9?3:G.sc>=5?2:1;
-  EL.fst.innerHTML=Array.from({length:3},(_,i)=>`<svg class="star ${i<st?'active':''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`).join('');
+  const mc=S.maxCount||10;
+  const pct=G.sc/mc;
+  const st=pct>=1?5:pct>=0.8?4:pct>=0.6?3:pct>=0.4?2:1;
+  EL.fst.innerHTML=Array.from({length:5},(_,i)=>`<svg class="star ${i<st?'active':''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`).join('');
 }
 const ASVG=`<svg viewBox="0 0 100 100" class="apl"><path d="M50 28C20 28 10 52 26 75 40 95 60 95 74 75 90 52 80 28 50 28" fill="#ef4444"/><path d="M50 28Q52 12 64 7" stroke="#65a30d" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="38" cy="48" rx="6" ry="9" fill="rgba(255,255,255,0.2)" transform="rotate(-20 38 48)"/></svg>`;
 const ASVG_DIM=`<svg viewBox="0 0 100 100" class="apl apl-dim"><path d="M50 28C20 28 10 52 26 75 40 95 60 95 74 75 90 52 80 28 50 28" fill="#ef4444"/><path d="M50 28Q52 12 64 7" stroke="#65a30d" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="38" cy="48" rx="6" ry="9" fill="rgba(255,255,255,0.2)" transform="rotate(-20 38 48)"/></svg>`;
