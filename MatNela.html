@@ -363,16 +363,8 @@ input:checked + .sld:before{transform:translateX(24px);background-color:var(--cy
   </div>
 </div>
 
+<script src="./version.js"></script>
 <script>
-/* WARNING ⚠️
-   ╔════════════════════════════════════════════════════════╗
-   ║  APP_VERSION — INCREMENT ON EVERY NEW RELEASE!         ║
-   ║  Pattern: mn-v1.0 → mn-v1.1 → mn-v1.2 → mn-v2.0 etc.   ║
-   ║  This value is used as the Service Worker cache name.  ║
-   ║  Changing it forces cache refresh for all users.       ║
-   ╚════════════════════════════════════════════════════════╝ */
-const APP_VERSION='mn-v1.2';
-
 /* ═══════════════════════════════════
    PWA + SERVICE WORKER
    ═══════════════════════════════════ */
@@ -480,7 +472,7 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.error('Service Worker Registration Failed', err));
   });
   
-  // Update version badge in menu with current APP_VERSION
+  // Update version badge in menu with current 
   const vEl = document.getElementById('menu-ver');
   if(vEl) vEl.textContent = 'MatNela (' + APP_VERSION + ')';
 }
