@@ -5,4 +5,4 @@
    ║  This value is used as the Service Worker cache name.  ║
    ║  Changing it forces cache refresh for all users.       ║
    ╚════════════════════════════════════════════════════════╝ */
-const APP_VERSION = 'mn-v1.3';
+const APP_VERSION = 'mn-v1.4';
